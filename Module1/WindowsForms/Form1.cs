@@ -22,5 +22,10 @@ namespace WindowsForms
             var name = this.textBox1.Text;
             MessageBox.Show($"Hello, {name}!!!");
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
