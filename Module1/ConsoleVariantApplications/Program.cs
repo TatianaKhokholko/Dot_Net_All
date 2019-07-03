@@ -6,11 +6,13 @@ namespace ConsoleVariantApplications
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Командная строка содержит " + args.Length + " аргумента.\nВот они: ");
-            for (int i = 0; i < args.Length; i++)
+            Console.WriteLine($"Командная строка содержит {args.Length}");
+
+            foreach (string item in args)
             {
-                Console.WriteLine("Hello " + args[i]);
+                Console.WriteLine($"Hello, {item}");
             }
+
             Console.WriteLine("Press ENTER to exit");
             Console.ReadLine();
         }
