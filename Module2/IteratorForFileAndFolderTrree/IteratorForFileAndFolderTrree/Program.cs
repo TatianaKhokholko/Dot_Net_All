@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace IteratorForFileAndFolderTrree
+namespace IteratorForFileAndFolderTree
 {
     class Program
     {
