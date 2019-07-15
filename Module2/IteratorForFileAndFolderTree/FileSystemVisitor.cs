@@ -15,20 +15,29 @@ namespace IteratorForFileAndFolderTree
 
         public IEnumerable<string> CustomIterator()
         {
-            yield return "Каталоги: \n";
-
             string[] directories = Directory.GetDirectories(startDirectory);
             foreach (string dir in directories)
             {
-                yield return dir;
-            }
+                yield return "\nКаталог: " + dir;
 
-            yield return "Файлы: \n";
+                string[] files = Directory.GetFiles(dir);
+                foreach (string file in files)
+                {
+                    yield return "---Файлы:---";
+                    yield return file;
+                }
 
-            string[] files = Directory.GetFiles(startDirectory);
-            foreach (string file in files)
-            {
-                yield return file;
+                string[] subDirectories = Directory.GetDirectories(dir);
+                foreach (string subDir in subDirectories)
+                {
+                    yield return "\nПодкаталог: " + subDir;
+                    string[] filesSubDirectory = Directory.GetFiles(subDir);
+                    foreach (string file in filesSubDirectory)
+                    {
+                        yield return "---Файлы:---";
+                        yield return file;
+                    }
+                }
             }
         }
     }
