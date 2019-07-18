@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-
 
 namespace IteratorForFileAndFolderTree
 {
     public class FileSystemVisitor
     {
         private readonly string startDirectory;
+        private readonly Func<string, bool> filterForDirictory;
 
-        public FileSystemVisitor(string startDirectory)
+        public FileSystemVisitor(string startDirectory, Func<string, bool> filterForDirictory = null)
         {
             this.startDirectory = startDirectory;
+            this.filterForDirictory = filterForDirictory;
         }
 
-        public IEnumerable<string> CustomIterator()
+        public IEnumerable<string> IteratorForDirectories(string startDirectory)
         {
             string[] directories = Directory.GetDirectories(startDirectory);
             foreach (string dir in directories)
@@ -40,5 +42,6 @@ namespace IteratorForFileAndFolderTree
                 }
             }
         }
+
     }
 }
