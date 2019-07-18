@@ -6,42 +6,37 @@ namespace IteratorForFileAndFolderTree
 {
     public class FileSystemVisitor
     {
-        private readonly string startDirectory;
-        private readonly Func<string, bool> filterForDirictory;
+        private readonly Func<string, bool> _filter;
 
-        public FileSystemVisitor(string startDirectory, Func<string, bool> filterForDirictory = null)
+        public FileSystemVisitor(Func<string, bool> filter)
         {
-            this.startDirectory = startDirectory;
-            this.filterForDirictory = filterForDirictory;
+            _filter = filter;
         }
 
         public IEnumerable<string> IteratorForDirectories(string startDirectory)
         {
+            List<string> result = new List<string>();
+
             string[] directories = Directory.GetDirectories(startDirectory);
-            foreach (string dir in directories)
+            // отфильтруй мне коллекцию дирректорий и присоедени её к результирующему List
+            result.AddRange(FilterForPaths(directories, "Директория:\n"));
+
+            string[] files = Directory.GetFiles(startDirectory);
+            // к полученному выше результату присоедени мне отфильтрованную коллекцию файлов
+            result.AddRange(FilterForPaths(files, "Файл:\n"));
+
+            return result;
+        }
+
+        private IEnumerable<string> FilterForPaths(string[] paths, string prefix)
+        {
+            foreach (var path in paths)
             {
-                yield return "\nКаталог: " + dir;
-
-                string[] files = Directory.GetFiles(dir);
-                foreach (string file in files)
+                if (_filter(path))
                 {
-                    yield return "---Файлы:---";
-                    yield return file;
-                }
-
-                string[] subDirectories = Directory.GetDirectories(dir);
-                foreach (string subDir in subDirectories)
-                {
-                    yield return "\nПодкаталог: " + subDir;
-                    string[] filesSubDirectory = Directory.GetFiles(subDir);
-                    foreach (string file in filesSubDirectory)
-                    {
-                        yield return "---Файлы:---";
-                        yield return file;
-                    }
+                    yield return prefix + path;
                 }
             }
         }
-
     }
 }

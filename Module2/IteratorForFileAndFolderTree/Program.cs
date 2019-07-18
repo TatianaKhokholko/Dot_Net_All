@@ -7,25 +7,20 @@ namespace IteratorForFileAndFolderTree
     {
         static void Main(string[] args)
         {
-            Func<string, bool> initializationDirictory = inputUser =>
+            Func<string, bool> initializationDirictory = input =>
             {
-                string input = "D:\\Study";
-                return inputUser.Equals(input);
+                return input.Contains("r");
             };
 
             Console.WriteLine("Введите интересующий вас каталог\n");
             string startDirectory = Console.ReadLine();
-            FileSystemVisitor fileSystemVisitor = new FileSystemVisitor(startDirectory, initializationDirictory);
 
-            FilterByDirectoryValue filterByDirectoryValue = new FilterByDirectoryValue();
-            if (filterByDirectoryValue.ShowResultAfterFilter(initializationDirictory, startDirectory) != false)
+            FileSystemVisitor fileSystemVisitor = new FileSystemVisitor(initializationDirictory);
+            foreach (var item in fileSystemVisitor.IteratorForDirectories(startDirectory))
             {
-                foreach (var item in fileSystemVisitor.IteratorForDirectories(startDirectory))
-                {
-                    Console.WriteLine(item);
-                }
-               
+                Console.WriteLine(item);
             }
+               
             Console.WriteLine("Нажмите ENTER для выхода");
             Console.ReadLine();
         }
