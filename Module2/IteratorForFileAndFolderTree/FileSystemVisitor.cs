@@ -69,7 +69,7 @@ namespace IteratorForFileAndFolderTree
             // к полученному выше результату присоедени мне отфильтрованную коллекцию файлов
             result.AddRange(FilterForPaths(files, "Файл: "));
 
-            OnFinish("\nЯ закончил поиск/n Полный список объектов, выбранного пути:");
+            OnFinish("\nЯ закончил поиск\nПолный список объектов, выбранного пути:");
             return result;
         }
 
