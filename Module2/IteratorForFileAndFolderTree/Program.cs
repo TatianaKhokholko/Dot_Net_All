@@ -16,7 +16,6 @@ namespace IteratorForFileAndFolderTree
             string startDirectory = Console.ReadLine();
 
             FileSystemVisitor fileSystemVisitor = new FileSystemVisitor(initializationDirictory);
-            //fileSystemVisitor.Start += listeningEvent;
             foreach (var item in fileSystemVisitor.IteratorForDirectories(startDirectory))
             {
                 Console.WriteLine(item);
@@ -25,10 +24,5 @@ namespace IteratorForFileAndFolderTree
             Console.WriteLine("Нажмите ENTER для выхода");
             Console.ReadLine();
         }
-
-        //private static void listeningEvent(string obj)
-        //{
-        //    Console.WriteLine("");
-        //}
     }
 }

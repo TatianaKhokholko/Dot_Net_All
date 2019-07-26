@@ -20,7 +20,6 @@ namespace IteratorForFileAndFolderTree
         public event Action<string> FilteredDirectoryFinded;
         public event Action<string> FilteredFileFinded;
    
-
         protected virtual void OnStart(string path) 
         {
             Start?.Invoke(path);
@@ -59,18 +58,18 @@ namespace IteratorForFileAndFolderTree
 
         public IEnumerable<string> IteratorForDirectories(string startDirectory)
         {
-            OnStart("Я начал поиск");
+            OnStart("Я начал поиск\n");
             List<string> result = new List<string>();
 
             string[] directories = Directory.GetDirectories(startDirectory);
             // отфильтруй мне коллекцию дирректорий и присоедени её к результирующему List
-            result.AddRange(FilterForPaths(directories, "Директории:\n"));
+            result.AddRange(FilterForPaths(directories, "Директория: "));
 
             string[] files = Directory.GetFiles(startDirectory);
             // к полученному выше результату присоедени мне отфильтрованную коллекцию файлов
-            result.AddRange(FilterForPaths(files, "Файлы:\n"));
+            result.AddRange(FilterForPaths(files, "Файл: "));
 
-            OnFinish("Я закончил поиск");
+            OnFinish("\nЯ закончил поиск/n Полный список объектов, выбранного пути:");
             return result;
         }
 
@@ -78,19 +77,32 @@ namespace IteratorForFileAndFolderTree
         {
             foreach (var path in paths)
             {
-                //OnDirectoryFinded("Событие для всех найденных папок до фильтрации");
-                //OnFileFinded("Событие для всех найденных файлов до фильтрации");
-             
-                if (_filter(path) & prefix.Contains("Дир"))
+                if (prefix.Contains("Дир"))
                 {
-                    OnFilteredDirectoryFinded("Я нашел такие директории:\n" + prefix + path);
-                    yield return prefix + path;
+                    OnDirectoryFinded("Найденные папки до фильтрации: " + prefix + path);
                 }
                 else
                 {
-                    OnFilteredFileFinded("Я нашел такие файлы:\n" + prefix + path);
-                    yield return prefix + path;
+                    OnFileFinded("Найденные файлы до фильтрации: " + prefix + path);
                 }
+
+                yield return prefix + path;
+            }
+
+            foreach (var path in paths)
+            {
+                if (_filter(path))
+                {
+                    if (prefix.Contains("Дир"))
+                    {
+                        OnFilteredDirectoryFinded("Найденные папки после фильтрации: " + prefix + path);
+                    }
+                    else
+                    {
+                        OnFilteredFileFinded("Найденные файлы после фильтрации " + prefix + path);
+                    }             
+                }
+                yield return prefix + path;
             }
         }
     }
