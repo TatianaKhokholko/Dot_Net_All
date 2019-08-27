@@ -215,8 +215,8 @@ namespace SampleQueries
                     statisticForYear = cus.Orders.GroupBy(ord => ord.OrderDate.Year)
                                         .Select(group => new
                                         {
-                                            Year = group.Key,
-                                            OrdersCount = group.Count()
+                                            year = group.Key,
+                                            ordersCount = group.Count()
                                         }),
                      statisticYearMonth = cus.Orders
                                         .GroupBy(ord => new
@@ -228,9 +228,28 @@ namespace SampleQueries
                                         {
                                             group.Key.Year,
                                             group.Key.Month,
-                                            OrdersCount = group.Count()
+                                            ordersCount = group.Count()
                                         })
                  });
+
+            foreach (var groupStatistic in statisticResult)
+            {
+                Console.WriteLine($"Customer {groupStatistic.CustomerID} ordered statistic:");
+                foreach (var month in groupStatistic.statisticForMonth)
+                {
+                    Console.WriteLine($"1. per month: {month.month} = {month.ordersCount}");
+                }
+
+                foreach (var year in groupStatistic.statisticForYear)
+                {
+                    Console.WriteLine($"2. per year: {year.year} = {year.ordersCount}");
+                }
+
+                foreach (var monthYear in groupStatistic.statisticYearMonth)
+                {
+                    Console.WriteLine($"3. per : {monthYear.Year} {monthYear.Month} ordered = {monthYear.ordersCount}");
+                }
+            }
         }
     }
 }
