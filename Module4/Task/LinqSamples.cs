@@ -179,14 +179,13 @@ namespace SampleQueries
 
             foreach (var groupForPrice in productGroups)
             {
-                Console.WriteLine($"\n{groupForPrice.Key}");
+                Console.WriteLine($"{groupForPrice.Key}");
                 foreach (var product in groupForPrice)
                 {
                     Console.WriteLine($"Product {product.ProductName} and price = {product.UnitPrice}");
                 }
             }
-        }
-                                
+        }                     
 
         [Category("LINQ")]
         [Title("Task 9")]
@@ -222,13 +221,13 @@ namespace SampleQueries
                                         .Select(group => new
                                         {
                                             month = group.Key,
-                                            ordersCount = group.Count()
+                                            countToOrderedInMonth = group.Count()
                                         }),
                     statisticForYear = cus.Orders.GroupBy(ord => ord.OrderDate.Year)
                                         .Select(group => new
                                         {
                                             year = group.Key,
-                                            ordersCount = group.Count()
+                                            countToOrderedInYear = group.Count()
                                         }),
                      statisticYearMonth = cus.Orders
                                         .GroupBy(ord => new
@@ -240,7 +239,7 @@ namespace SampleQueries
                                         {
                                             group.Key.Year,
                                             group.Key.Month,
-                                            ordersCount = group.Count()
+                                            countToOrderedInYearAndMonth = group.Count()
                                         })
                  });
 
@@ -249,17 +248,17 @@ namespace SampleQueries
                 Console.WriteLine($"Customer {groupStatistic.CustomerID} ordered statistic:");
                 foreach (var month in groupStatistic.statisticForMonth)
                 {
-                    Console.WriteLine($"1. per month: {month.month} = {month.ordersCount}");
+                    Console.WriteLine($"1. per {month.month} month = {month.countToOrderedInMonth} orders");
                 }
 
                 foreach (var year in groupStatistic.statisticForYear)
                 {
-                    Console.WriteLine($"2. per year: {year.year} = {year.ordersCount}");
+                    Console.WriteLine($"2. per {year.year} year = {year.countToOrderedInYear} orders");
                 }
 
                 foreach (var monthYear in groupStatistic.statisticYearMonth)
                 {
-                    Console.WriteLine($"3. per : {monthYear.Year} {monthYear.Month} ordered = {monthYear.ordersCount}");
+                    Console.WriteLine($"3. per : {monthYear.Year} year and {monthYear.Month} month = {monthYear.countToOrderedInYearAndMonth} orders");
                 }
             }
         }
