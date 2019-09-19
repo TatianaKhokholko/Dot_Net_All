@@ -174,12 +174,17 @@ namespace SampleQueries
             decimal cheap = 8;
             decimal expensive = 25;
 
-          //  var productGroups = dataSource.Products
+            var productGroups = dataSource.Products
+                .GroupBy(sort => sort.UnitPrice < cheap ? "Cheap products" : sort.UnitPrice > expensive ? "Expensive products" : "Average products");
 
-            //foreach (var group in productGroups)
-            //{
-      
-            //}
+            foreach (var groupForPrice in productGroups)
+            {
+                Console.WriteLine($"\n{groupForPrice.Key}");
+                foreach (var product in groupForPrice)
+                {
+                    Console.WriteLine($"Product {product.ProductName} and price = {product.UnitPrice}");
+                }
+            }
         }
                                 
 
