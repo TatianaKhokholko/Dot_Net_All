@@ -8,31 +8,31 @@ namespace FileSystemWatcherModule
         public void WatcherFile()
         {
             string path = @"D:\TEST\";
-            using (FileSystemWatcher watcher = new FileSystemWatcher())
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            if (!Directory.Exists(path))
             {
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                watcher.Path = path;
-                watcher.NotifyFilter = NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.DirectoryName;
-                watcher.Filter = "*.txt";
-                watcher.Changed += OnChanged;
-                watcher.Created += OnChanged;
-                watcher.Deleted += OnChanged;
-                watcher.Renamed += OnRenamed;
-
-                watcher.EnableRaisingEvents = true;
+                Directory.CreateDirectory(path);
             }
-        }
+            watcher.Path = path;
 
-        private static void OnChanged(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"File {e.FullPath} has some changed {e.ChangeType}");
+            watcher.NotifyFilter = NotifyFilters.LastAccess
+                | NotifyFilters.LastWrite
+                | NotifyFilters.FileName
+                | NotifyFilters.DirectoryName;
+            watcher.Filter = "*.txt";
+            watcher.Created += OnChanged;
+            watcher.Changed += OnChanged;
+            watcher.Deleted += OnChanged;
+            watcher.Renamed += OnRenamed;
 
-        private static void OnRenamed(object sender, RenamedEventArgs e) =>
-            Console.WriteLine($"File {e.OldName} {e.OldFullPath} renamed to {e.Name} {e.FullPath}");
+            watcher.EnableRaisingEvents = true;
+        }        
+
+        private void OnChanged(object sender, FileSystemEventArgs e) =>
+            Console.WriteLine($"File {e.FullPath} has changed - {e.ChangeType}");
+
+        private void OnRenamed(object sender, RenamedEventArgs e) =>
+            Console.WriteLine($"File {e.OldName} by path {e.OldFullPath} renamed to {e.Name} by path {e.FullPath}");
     }
 }
 
