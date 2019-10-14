@@ -1,19 +1,26 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Threading;
 
 namespace FileSystemWatcherModule
 {
     class Program
     {
+        private static readonly AutoResetEvent _closeEvent = new AutoResetEvent(false);
+
         static void Main(string[] args)
         {
-      
-            Console.ReadKey();
+            Console.WriteLine("If you want to exit please enter Ctrl+C");
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                _closeEvent.Set();
+            };
 
-  
-        }
+            WatcherDirectory watcher = new WatcherDirectory();
+            watcher.WatcherFile();
+            _closeEvent.WaitOne();
+        }     
     }
 }
+
