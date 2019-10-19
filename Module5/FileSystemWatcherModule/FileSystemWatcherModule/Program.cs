@@ -7,7 +7,7 @@ namespace FileSystemWatcherModule
     class Program
     {
         private static readonly AutoResetEvent _closeEvent = new AutoResetEvent(false);
-
+        
         static void Main(string[] args)
         {
             Console.WriteLine("If you want to exit please enter Ctrl+C");

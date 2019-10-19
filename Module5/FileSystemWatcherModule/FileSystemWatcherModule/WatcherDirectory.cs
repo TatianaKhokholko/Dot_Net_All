@@ -1,32 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileSystemWatcherModule
 {
     class WatcherDirectory
     {
+        protected ModelConfig configs = new ModelConfig();
+
         public void WatcherFile()
         {
-            string path = @"D:\TEST\";
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            if (!Directory.Exists(path))
+            List<string> directories = new List<string>();
+            directories.Add(configs.Directory1());
+            directories.Add(configs.Directory2());
+
+            foreach (var directory in directories)
             {
-                Directory.CreateDirectory(path);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }                               
             }
-            watcher.Path = path;
+            //IteratorForWatchingDirectories(directories);
+            foreach (var path in directories)
+            {
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                watcher.Path = path.ToString();
 
-            watcher.NotifyFilter = NotifyFilters.LastAccess
-                | NotifyFilters.LastWrite
-                | NotifyFilters.FileName
-                | NotifyFilters.DirectoryName;
-            watcher.Filter = "*.txt";
-            watcher.Created += OnChanged;
-            watcher.Changed += OnChanged;
-            watcher.Deleted += OnChanged;
-            watcher.Renamed += OnRenamed;
+                watcher.NotifyFilter = NotifyFilters.LastAccess
+                    | NotifyFilters.LastWrite
+                    | NotifyFilters.FileName
+                    | NotifyFilters.DirectoryName;
+                watcher.Filter = "*.txt";
+                watcher.Created += OnChanged;
+                watcher.Changed += OnChanged;
+                watcher.Deleted += OnChanged;
+                watcher.Renamed += OnRenamed;
 
-            watcher.EnableRaisingEvents = true;
-        }        
+                watcher.EnableRaisingEvents = true;
+                //yield return path;
+            }
+        }
+      
+        //public IEnumerable<string> IteratorForWatchingDirectories(List<string> directories)
+        //{
+        //    foreach (var path in directories)
+        //    {
+        //        FileSystemWatcher watcher = new FileSystemWatcher();
+        //        watcher.Path = path.ToString();
+
+        //        watcher.NotifyFilter = NotifyFilters.LastAccess
+        //            | NotifyFilters.LastWrite
+        //            | NotifyFilters.FileName
+        //            | NotifyFilters.DirectoryName;
+        //        watcher.Filter = "*.txt";
+        //        watcher.Created += OnChanged;
+        //        watcher.Changed += OnChanged;
+        //        watcher.Deleted += OnChanged;
+        //        watcher.Renamed += OnRenamed;
+
+        //        watcher.EnableRaisingEvents = true;
+        //        yield return path;
+        //    }
+        //}
 
         private void OnChanged(object sender, FileSystemEventArgs e) =>
             Console.WriteLine($"File {e.FullPath} has changed - {e.ChangeType}");
