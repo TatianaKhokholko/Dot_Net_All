@@ -11,5 +11,7 @@ namespace FileSystemWatcherModule
 
         public String Directory1() => configLoader.GetByKey("path1");
         public String Directory2() => configLoader.GetByKey("path2");
+        public String DefaultDirectory() => configLoader.GetByKey("defaultPath");
+        public String RuleByNameFile() => configLoader.GetByKey("nameFile");
     }
 }

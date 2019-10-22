@@ -16,7 +16,7 @@ namespace FileSystemWatcherModule
                 eventArgs.Cancel = true;
                 _closeEvent.Set();
             };
-
+            
             WatcherDirectory watcher = new WatcherDirectory();
             watcher.WatcherFile();
             _closeEvent.WaitOne();

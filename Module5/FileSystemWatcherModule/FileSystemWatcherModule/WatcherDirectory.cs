@@ -7,68 +7,56 @@ namespace FileSystemWatcherModule
     class WatcherDirectory
     {
         protected ModelConfig configs = new ModelConfig();
+        protected List<string> directories = new List<string>();
+        FileSystemWatcher watcher;
 
         public void WatcherFile()
+        {            
+            CreateDirectories();
+            foreach (var path in directories)
+            {
+                watcher = new FileSystemWatcher(path.ToString());
+                watcher.NotifyFilter = NotifyFilters.LastAccess
+                    | NotifyFilters.LastWrite
+                    | NotifyFilters.FileName
+                    | NotifyFilters.DirectoryName;                
+               
+                watcher.Created += OnChanged;
+                watcher.Changed += OnChanged;
+                watcher.Deleted += OnChanged;
+                watcher.Renamed += OnRenamed;
+                watcher.EnableRaisingEvents = true;
+                CopyToDefaultDirectories(path);
+            }
+        }
+
+        private void CreateDirectories()
         {
-            List<string> directories = new List<string>();
             directories.Add(configs.Directory1());
             directories.Add(configs.Directory2());
-
             foreach (var directory in directories)
             {
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
-                }                               
-            }
-            //IteratorForWatchingDirectories(directories);
-            foreach (var path in directories)
-            {
-                FileSystemWatcher watcher = new FileSystemWatcher();
-                watcher.Path = path.ToString();
-
-                watcher.NotifyFilter = NotifyFilters.LastAccess
-                    | NotifyFilters.LastWrite
-                    | NotifyFilters.FileName
-                    | NotifyFilters.DirectoryName;
-                watcher.Filter = "*.txt";
-                watcher.Created += OnChanged;
-                watcher.Changed += OnChanged;
-                watcher.Deleted += OnChanged;
-                watcher.Renamed += OnRenamed;
-
-                watcher.EnableRaisingEvents = true;
-                //yield return path;
+                }
             }
         }
-      
-        //public IEnumerable<string> IteratorForWatchingDirectories(List<string> directories)
-        //{
-        //    foreach (var path in directories)
-        //    {
-        //        FileSystemWatcher watcher = new FileSystemWatcher();
-        //        watcher.Path = path.ToString();
 
-        //        watcher.NotifyFilter = NotifyFilters.LastAccess
-        //            | NotifyFilters.LastWrite
-        //            | NotifyFilters.FileName
-        //            | NotifyFilters.DirectoryName;
-        //        watcher.Filter = "*.txt";
-        //        watcher.Created += OnChanged;
-        //        watcher.Changed += OnChanged;
-        //        watcher.Deleted += OnChanged;
-        //        watcher.Renamed += OnRenamed;
-
-        //        watcher.EnableRaisingEvents = true;
-        //        yield return path;
-        //    }
-        //}
+        private void CopyToDefaultDirectories(string directory)
+        {
+            string[] files = Directory.GetFiles(directory, configs.RuleByNameFile());
+            foreach (string file in files)
+            {
+                File.Copy(Path.Combine(directory, file), Path.Combine(configs.DefaultDirectory(), file), true);
+            }
+        }
 
         private void OnChanged(object sender, FileSystemEventArgs e) =>
-            Console.WriteLine($"File {e.FullPath} has changed - {e.ChangeType}");
+            Console.WriteLine($"File {e.Name} has changed - {e.ChangeType} by path {e.FullPath}");
 
         private void OnRenamed(object sender, RenamedEventArgs e) =>
-            Console.WriteLine($"File {e.OldName} by path {e.OldFullPath} renamed to {e.Name} by path {e.FullPath}");
+            Console.WriteLine($"File {e.OldName} renamed to {e.Name} by path {e.FullPath}");
     }
 }
 
