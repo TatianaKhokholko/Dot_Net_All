@@ -9,9 +9,9 @@ namespace FileSystemWatcherModule
     {
         private ConfigLoader configLoader = new ConfigLoader();
 
-        public String Directory1() => configLoader.GetByKey("path1");
-        public String Directory2() => configLoader.GetByKey("path2");
-        public String DefaultDirectory() => configLoader.GetByKey("defaultPath");
-        public String RuleByNameFile() => configLoader.GetByKey("nameFile");
+        public String Directory1 => configLoader.GetByKey("path1");
+        public String Directory2 => configLoader.GetByKey("path2");
+        public String DefaultDirectory => configLoader.GetByKey("defaultPath");
+        public String RuleByNameFile => configLoader.GetByKey("nameFile");
     }
 }

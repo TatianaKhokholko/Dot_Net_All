@@ -6,35 +6,37 @@ namespace FileSystemWatcherModule
 {
     class WatcherDirectory
     {
-        protected ModelConfig configs = new ModelConfig();
-        protected List<string> directories = new List<string>();
-        FileSystemWatcher watcher;
+        private ModelConfig configs = new ModelConfig();
+        private List<string> directories;
 
         public void WatcherFile()
-        {            
+        {
             CreateDirectories();
+            directories = SetListenedDirectories();
+           
             foreach (var path in directories)
             {
-                watcher = new FileSystemWatcher(path.ToString());
+                FileSystemWatcher watcher = new FileSystemWatcher(path.ToString());
                 watcher.NotifyFilter = NotifyFilters.LastAccess
                     | NotifyFilters.LastWrite
                     | NotifyFilters.FileName
-                    | NotifyFilters.DirectoryName;                
-               
-                watcher.Created += OnChanged;
-                watcher.Changed += OnChanged;
-                watcher.Deleted += OnChanged;
-                watcher.Renamed += OnRenamed;
+                    | NotifyFilters.DirectoryName;
                 watcher.EnableRaisingEvents = true;
-                CopyToDefaultDirectories(path);
+
+                watcher.Created += OnChanged;
+                watcher.Changed +=  OnCopeFileInDefaultDirectory;
+                watcher.Deleted += OnChanged;
+                watcher.Renamed += OnRenamed;            
             }
         }
 
         private void CreateDirectories()
         {
-            directories.Add(configs.Directory1());
-            directories.Add(configs.Directory2());
-            foreach (var directory in directories)
+            var result = new List<string>();
+            result.Add(configs.Directory1);
+            result.Add(configs.Directory2);
+            result.Add(configs.DefaultDirectory);
+            foreach (var directory in result)
             {
                 if (!Directory.Exists(directory))
                 {
@@ -43,12 +45,33 @@ namespace FileSystemWatcherModule
             }
         }
 
-        private void CopyToDefaultDirectories(string directory)
+        private List<string> SetListenedDirectories()
         {
-            string[] files = Directory.GetFiles(directory, configs.RuleByNameFile());
-            foreach (string file in files)
+            var result = new List<string>();
+            result.Add(configs.Directory1);
+            result.Add(configs.Directory2);
+            return result;
+        }
+
+        private void CopyToDefaultDirectories(string path)
+        {
+            string[] filesWithPath = Directory.GetFiles(path, configs.RuleByNameFile);
+            foreach (string fileWithPath in filesWithPath)
             {
-                File.Copy(Path.Combine(directory, file), Path.Combine(configs.DefaultDirectory(), file), true);
+                string newFileName = fileWithPath.Replace(path, "");
+                string destenationPath = Path.Combine(configs.DefaultDirectory, newFileName);
+
+                File.Copy(fileWithPath, destenationPath, true);
+                Console.WriteLine($"File {newFileName} was copy to {destenationPath}");
+            }
+        }
+
+        private void OnCopeFileInDefaultDirectory(object sender, FileSystemEventArgs e)
+        {          
+            directories = SetListenedDirectories();
+            foreach (var path in directories)
+            {
+                CopyToDefaultDirectories(path);               
             }
         }
 
