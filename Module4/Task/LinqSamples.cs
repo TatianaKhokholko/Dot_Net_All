@@ -4,19 +4,14 @@
 //
 //Copyright (C) Microsoft Corporation.  All rights reserved.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml.Linq;
 using SampleSupport;
+using System;
+using System.Linq;
 using Task.Data;
 
 namespace SampleQueries
 {
-	[Title("LINQ Module")]
+    [Title("LINQ Module")]
 	[Prefix("Linq")]
 	public class LinqSamples : SampleHarness
 	{
@@ -57,10 +52,11 @@ namespace SampleQueries
                              nameSup = supliers.SupplierName,
                              customerName = customers.CompanyName
                          };
-            foreach (var makeList1 in resultGroup)
+
+            foreach (var listSuppliers in resultGroup)
             {
-                Console.WriteLine($"The customer '{makeList1.customerName}' has suppliers: '{makeList1.nameSup}' " +
-                    $"in the same country {makeList1.countrySup}({makeList1.citySup})");
+                Console.WriteLine($"The customer '{listSuppliers.customerName}' has suppliers: '{listSuppliers.nameSup}' " +
+                    $"in the same country {listSuppliers.countrySup}({listSuppliers.citySup})");
             }
 		}
         
@@ -70,12 +66,12 @@ namespace SampleQueries
         public void Linq3()
         {
             decimal x = 50000;
-            var orders = dataSource.Customers
+            var allCustomers = dataSource.Customers
                 .Where (ord => ord.Orders.Sum(total => total.Total) > x);
 
-            foreach (var allCustomers in orders)
+            foreach (var largeCustomers in allCustomers)
             {
-                Console.WriteLine($"{allCustomers.CompanyName}");
+                Console.WriteLine($"{largeCustomers.CompanyName}");
             }
         }
         
@@ -103,7 +99,7 @@ namespace SampleQueries
 
         [Category("LINQ")]
         [Title("Task 5")]
-        [Description("Output the first day of order and sort by total turnover (max->min).")]
+        [Description("Output the first day of order and sort by total turnover descending.")]
         public void Linq5()
         {
             var allCustomersByDate = dataSource.Customers
@@ -128,15 +124,25 @@ namespace SampleQueries
 
         [Category("LINQ")]
         [Title("Task 6")]
-        [Description("Output clients without region, operator code in the phone or without operator code.")]
+        [Description("Output where postal code exist and not a number.")]
         public void Linq6()
         {
             var customers = dataSource.Customers
-                .Where(sort => sort.Region != null || sort.Phone.First() != '(' || sort.PostalCode.Any(s => s < 0 || s > 9));
+                .Where(sort => (sort.PostalCode != null && sort.PostalCode.Any(s => !char.IsNumber(s)))
+                || string.IsNullOrWhiteSpace(sort.Region)
+                || sort.Phone.FirstOrDefault() != '(')
+            .Select(sort=> new 
+            {
+                postCode = sort.PostalCode,
+                phone = sort.Phone,
+                regionExist = string.IsNullOrEmpty(sort.Region)? "no region!": "region exist!",
+                nameCustomer = sort.CompanyName
+
+            });
 
             foreach (var sortedCustomers in customers)
             {
-                Console.WriteLine(sortedCustomers.CompanyName + $" region = {sortedCustomers.Region}");
+                Console.WriteLine($"{sortedCustomers.nameCustomer} postal code = {sortedCustomers.postCode} phone = {sortedCustomers.phone} {sortedCustomers.regionExist}");
             }
         }
 
@@ -145,7 +151,7 @@ namespace SampleQueries
         [Description("Output group products by categories, then by units in stock, then order by price.")]
         public void Linq7()
         {
-            var groupProduct = from category in dataSource.Products
+            var groupCategories = from category in dataSource.Products
                                orderby category.Category, category.UnitsInStock descending, category.UnitPrice descending
                                select new
                                {
@@ -154,9 +160,9 @@ namespace SampleQueries
                                    unitPrice = category.UnitPrice
                                };
 
-            foreach (var result in groupProduct)
+            foreach (var result in groupCategories)
             {
-                Console.WriteLine(result);
+                Console.WriteLine($"Group and sord by catigories: {result}");
             }
         }
 
@@ -168,14 +174,18 @@ namespace SampleQueries
             decimal cheap = 8;
             decimal expensive = 25;
 
-          //  var productGroups = dataSource.Products
+            var productGroups = dataSource.Products
+                .GroupBy(sort => sort.UnitPrice < cheap ? "Cheap products" : sort.UnitPrice > expensive ? "Expensive products" : "Average products");
 
-            //foreach (var group in productGroups)
-            //{
-      
-            //}
-        }
-                                
+            foreach (var groupForPrice in productGroups)
+            {
+                Console.WriteLine($"{groupForPrice.Key}");
+                foreach (var product in groupForPrice)
+                {
+                    Console.WriteLine($"Product {product.ProductName} and price = {product.UnitPrice}");
+                }
+            }
+        }                     
 
         [Category("LINQ")]
         [Title("Task 9")]
@@ -187,19 +197,20 @@ namespace SampleQueries
                 .Select(cus => new
                 {
                     city = cus.Key,
-                    avarageIntensity = cus.Average(pr => pr.Orders.Sum(order => order.Total))
+                    avarageIntensity = cus.Average(pr => pr.Orders.Length),
+                    avarageSum = cus.Average(pr => pr.Orders.Sum(order => order.Total))
 
                 });
 
             foreach (var group in results)
             {
-                Console.WriteLine($"select city : {group.city} with {group.avarageIntensity:C} ");
+                Console.WriteLine($"select city : {group.city} with avarage intensity = {group.avarageIntensity} and sum = {group.avarageSum:C} ");
             }
         }
 
         [Category("LINQ")]
         [Title("Task 10")]
-        [Description("Output average annual customer statistics by month, year, year and month.")]
+        [Description("Output average annual customer statistics by month, year, year and month.")] //переделывать!
         public void Linq10()
         {
             var statisticResult = dataSource.Customers
@@ -210,13 +221,13 @@ namespace SampleQueries
                                         .Select(group => new
                                         {
                                             month = group.Key,
-                                            ordersCount = group.Count()
+                                            countToOrderedInMonth = group.Count()
                                         }),
                     statisticForYear = cus.Orders.GroupBy(ord => ord.OrderDate.Year)
                                         .Select(group => new
                                         {
                                             year = group.Key,
-                                            ordersCount = group.Count()
+                                            countToOrderedInYear = group.Count()
                                         }),
                      statisticYearMonth = cus.Orders
                                         .GroupBy(ord => new
@@ -228,7 +239,7 @@ namespace SampleQueries
                                         {
                                             group.Key.Year,
                                             group.Key.Month,
-                                            ordersCount = group.Count()
+                                            countToOrderedInYearAndMonth = group.Count()
                                         })
                  });
 
@@ -237,17 +248,17 @@ namespace SampleQueries
                 Console.WriteLine($"Customer {groupStatistic.CustomerID} ordered statistic:");
                 foreach (var month in groupStatistic.statisticForMonth)
                 {
-                    Console.WriteLine($"1. per month: {month.month} = {month.ordersCount}");
+                    Console.WriteLine($"1. per {month.month} month = {month.countToOrderedInMonth} orders");
                 }
 
                 foreach (var year in groupStatistic.statisticForYear)
                 {
-                    Console.WriteLine($"2. per year: {year.year} = {year.ordersCount}");
+                    Console.WriteLine($"2. per {year.year} year = {year.countToOrderedInYear} orders");
                 }
 
                 foreach (var monthYear in groupStatistic.statisticYearMonth)
                 {
-                    Console.WriteLine($"3. per : {monthYear.Year} {monthYear.Month} ordered = {monthYear.ordersCount}");
+                    Console.WriteLine($"3. per : {monthYear.Year} year and {monthYear.Month} month = {monthYear.countToOrderedInYearAndMonth} orders");
                 }
             }
         }
