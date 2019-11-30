@@ -6,7 +6,8 @@ namespace ConsoleAppExample
     {
         public void GetIt()
         {
-            Console.WriteLine("Plastic shit without main functionality");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("BEAUTIFUL!!!");
         }
     }
 }

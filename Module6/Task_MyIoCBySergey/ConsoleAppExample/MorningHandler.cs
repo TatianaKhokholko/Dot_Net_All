@@ -6,20 +6,15 @@ namespace ConsoleAppExample
     {
         private readonly IMorningShit _morningShit;// = new ShitCreator();
 
-        //public MorningHandler(IMorningShit morningShit)
-        //{
-        //    _morningShit = morningShit;
-        //}
-
-        public void MeetMorning(int counters)
+        public MorningHandler(IMorningShit morningShit)
         {
-            Console.WriteLine("Such a beautiful morning!");
+            _morningShit = morningShit;
+        }
+
+        public void MeetMorning()
+        {
+            Console.WriteLine("This Morning is");
             _morningShit.GetIt();
-            for (int i = 0; i < counters; i++)
-            {
-                Console.WriteLine(" Miu ");
-            }
-            Console.WriteLine("Sad story about cats morning");
         }
     }
 }

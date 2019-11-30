@@ -7,8 +7,15 @@ namespace ConsoleAppExample
         static void Main(string[] args)
         {
             // start Io Container
-            MorningHandler morningHandler = new MorningHandler();
-            morningHandler.MeetMorning(25);
+#if (DEBUG)
+            Console.WriteLine("Debug version.");
+            MorningHandler morningHandler = new MorningHandler(new MockShitCreator());
+            morningHandler.MeetMorning();
+#elif (RELEASE)
+            Console.WriteLine("Release version.");
+            MorningHandler morningHandler = new MorningHandler(new ShitCreator());
+            morningHandler.MeetMorning();
+#endif
             Console.ReadKey();
         }
     }

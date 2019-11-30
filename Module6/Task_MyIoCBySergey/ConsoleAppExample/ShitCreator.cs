@@ -6,9 +6,8 @@ namespace ConsoleAppExample
     {
         public void GetIt()
         {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("Shit revial!");
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("AWFUL!!!");
         }
     }
 }
