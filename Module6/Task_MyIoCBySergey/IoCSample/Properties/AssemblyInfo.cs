@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MyIoC")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IoCSample")]
+[assembly: AssemblyDescription("Module 5")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EPAM Systems")]
-[assembly: AssemblyProduct("MyIoC")]
-[assembly: AssemblyCopyright("Copyright © EPAM Systems 2016")]
+[assembly: AssemblyProduct("IoCSample")]
+[assembly: AssemblyCopyright("Copyright © EPAM Systems 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e4159eab-85b1-4816-8de1-97c098825c3d")]
+[assembly: Guid("92498ca6-bfda-4d0b-bac1-d204873d0122")]
 
 // Version information for an assembly consists of the following four values:
 //
