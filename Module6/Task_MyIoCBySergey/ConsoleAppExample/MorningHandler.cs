@@ -6,9 +6,9 @@ namespace ConsoleAppExample
     {
         private readonly IMorningShit _morningShit;// = new ShitCreator();
 
-        public MorningHandler(IMorningShit morningShit)
+        public MorningHandler()
         {
-            _morningShit = morningShit;
+            _morningShit = Program.Container.CreateInstance<IMorningShit>();
         }
 
         public void MeetMorning()

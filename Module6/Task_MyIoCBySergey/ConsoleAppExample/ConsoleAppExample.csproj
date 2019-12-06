@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IMorningShit.cs" />
+    <Compile Include="IocContainer\Container.cs" />
     <Compile Include="MockShitCreator.cs" />
     <Compile Include="MorningHandler.cs" />
     <Compile Include="Program.cs" />

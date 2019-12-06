@@ -1,21 +1,20 @@
 using System;
+using ConsoleAppExample.IocContainer;
 
 namespace ConsoleAppExample
 {
     class Program
     {
+        // start Io Container
+        public static Container Container = new Container();
+
         static void Main(string[] args)
         {
-            // start Io Container
-#if (DEBUG)
+            Container.RegistreDependency(typeof(IMorningShit), typeof(ShitCreator));
+
             Console.WriteLine("Debug version.");
-            MorningHandler morningHandler = new MorningHandler(new MockShitCreator());
+            MorningHandler morningHandler = new MorningHandler();
             morningHandler.MeetMorning();
-#elif (RELEASE)
-            Console.WriteLine("Release version.");
-            MorningHandler morningHandler = new MorningHandler(new ShitCreator());
-            morningHandler.MeetMorning();
-#endif
             Console.ReadKey();
         }
     }
