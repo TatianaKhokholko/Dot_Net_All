@@ -52,13 +52,12 @@
     <Compile Include="MorningHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShitCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="TestRunConfig\DebugConfig.json" />
-    <None Include="TestRunConfig\RealeseConfig.json" />
+    <None Include="TestRunConfig\Debug.json" />
+    <None Include="TestRunConfig\Release.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

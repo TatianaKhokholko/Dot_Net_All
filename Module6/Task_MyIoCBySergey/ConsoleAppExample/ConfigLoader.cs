@@ -6,24 +6,27 @@ using System.Text;
 namespace ConsoleAppExample
 {
     /// <summary>
-    /// Kласс для десериализации тестовых данных .json
+    /// Kласс для чтения и десериализации тестовых данных .json
     /// <summary>
     public class ConfigLoader : IMorningShit
     {
+        private readonly string PATH_JSON = @"..\..\TestRunConfig\Debug.json";
+
         [JsonProperty("Version")]
-        public string Version { get; set; }
+        private string Version { get; set; }
 
         [JsonProperty("Message")]
-        public string Message { get; set; }
+        private string Message { get; set; }
 
         public void GetIt()
         {
-            using (StreamReader streamReader = new StreamReader(@"..\..\TestRunConfig\DebugConfig.json"))
+            using (StreamReader streamReader = new StreamReader(PATH_JSON))
             {
                 var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
-                
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine(json.Version);
+
+                Console.WriteLine($"Version for programm is {json.Version}!");
+
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine(json.Message);
             }
         }

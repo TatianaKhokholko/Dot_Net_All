@@ -15,11 +15,6 @@ namespace ConsoleAppExample.IocContainer
             _dependencies.Add(key, value);
         }
 
-        //public void RegistreDependency(Type key, Type value)
-        //{
-        //    _dependencies.Add(key, value);
-        //}
-
         public I CreateInstance<I>()
              where I : class
         {
