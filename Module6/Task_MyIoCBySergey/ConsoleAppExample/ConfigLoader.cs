@@ -10,7 +10,7 @@ namespace ConsoleAppExample
     /// <summary>
     public class ConfigLoader : IMorningShit
     {
-        private readonly string PATH_JSON = @"..\..\TestRunConfig\Debug.json";
+        private readonly string PATH_JSON = @"..\..\TestRunConfig\Debuggg.json";
 
         [JsonProperty("Version")]
         private string Version { get; set; }
@@ -20,14 +20,20 @@ namespace ConsoleAppExample
 
         public void GetIt()
         {
-            using (StreamReader streamReader = new StreamReader(PATH_JSON))
+            try
             {
-                var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
+                using (StreamReader streamReader = new StreamReader(PATH_JSON))
+                {
+                    var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
 
-                Console.WriteLine($"Version for programm is {json.Version}!");
-
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine(json.Message);
+                    Console.WriteLine($"Version for programm is {json.Version}!");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine(json.Message);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"Файл не найден {e.Message}");
             }
         }
     }
