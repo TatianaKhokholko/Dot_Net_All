@@ -1,20 +1,40 @@
-﻿using System;
+﻿using ConsoleAppExample.Services;
+using Newtonsoft.Json;
+using System;
+using System.IO;
 
 namespace ConsoleAppExample
 {
-    public class MorningHandler
+    public class MorningHandler : IMorningShit
     {
-        private readonly IMorningShit _morningShit;// = new ShitCreator();
+        [JsonProperty("version")]
+        private string Version { get; set; }
 
-        public MorningHandler()
+        [JsonProperty("message")]
+        private string Message { get; set; }
+
+        public void MeetMorning(string path)
         {
-            _morningShit = Program.Container.CreateInstance<IMorningShit>();
+            CreateMorning(path);
         }
 
-        public void MeetMorning()
+        public void CreateMorning(string path)
         {
-            Console.WriteLine("This Morning is");
-            _morningShit.GetIt();
+            try
+            {
+                using (StreamReader streamReader = new StreamReader(path))
+                {
+                    var json = JsonConvert.DeserializeObject<MorningHandler>(streamReader.ReadToEnd());
+                    Console.WriteLine("Today morning is");
+                    Console.WriteLine(json.Message);
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine($"Version program is: {json.Version}");
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine($"File was not found {e.Message}");
+            }
         }
     }
 }

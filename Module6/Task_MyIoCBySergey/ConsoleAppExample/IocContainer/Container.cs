@@ -1,32 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using Autofac;
+using ConsoleAppExample.Services;
 
 namespace ConsoleAppExample.IocContainer
 {
-    public class Container
+    public static class Container
     {
-        private Dictionary<Type, Type> _dependencies = new Dictionary<Type, Type>();
-   
-        public Container(Type key, Type value)
+        public static IContainer Initialize(string path)
         {
-            _dependencies.Add(key, value);
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new SettingsModuleMorning(path));
+            builder.RegisterType<MorningHandler>().As<IMorningShit>();            
+      
+            return builder.Build();
         }
-
-        public I CreateInstance<I>()
-             where I : class
-        {
-            Type key = typeof(I);
-            if (_dependencies.ContainsKey(key))
-            {
-                return (I)Activator.CreateInstance(_dependencies[key]);
-            }
-            throw new InvalidOperationException("Зависимость не найдена.");
-        }
-
-
     }
 }
 

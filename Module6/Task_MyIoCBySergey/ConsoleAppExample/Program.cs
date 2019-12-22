@@ -1,22 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using ConsoleAppExample.IocContainer;
+using Autofac;
 
 namespace ConsoleAppExample
 {
     class Program
     {
         // start Io Container
-        public static Container Container;
-        
+        private static readonly string PATH_JSON = @"..\..\TestRunConfig\Release.json";
+        private static readonly IContainer Container = IocContainer.Container.Initialize(PATH_JSON);
+
         static void Main(string[] args)
         {
-            Container = new Container(typeof(IMorningShit), typeof(ConfigLoader));
-
             MorningHandler morningHandler = new MorningHandler();
-            morningHandler.MeetMorning();
-            Console.ReadKey();
+            morningHandler.MeetMorning(PATH_JSON);
+            Console.ReadKey(); 
         }
     }
 }
