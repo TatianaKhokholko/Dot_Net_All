@@ -33,7 +33,7 @@ namespace ConsoleAppExample
             }
             catch (FileNotFoundException e)
             {
-                Console.WriteLine($"File was not found {e.Message}");
+                Console.WriteLine(e.Message);
             }
         }
     }
