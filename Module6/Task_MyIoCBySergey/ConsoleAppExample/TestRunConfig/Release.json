@@ -1,4 +1,4 @@
 {
-  "Version": "Release",
-  "Message": "AWFUL!"
+  "Class": "ForReleaseVersion",
+  "Interface": "IMorningShit"
 }

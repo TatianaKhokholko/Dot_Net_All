@@ -1,32 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ConsoleAppExample.SettingClasses;
+using Newtonsoft.Json;
+using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace ConsoleAppExample.IocContainer
 {
     public class Container
     {
-        private Dictionary<Type, Type> _dependencies = new Dictionary<Type, Type>();
-   
-        public Container(Type key, Type value)
+        private string nameClass;
+
+        public Container(string path)
         {
-            _dependencies.Add(key, value);
+            try
+            {
+                using (StreamReader streamReader = new StreamReader(path))
+                {
+                    var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
+                    nameClass = json.Class;
+                          
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public I CreateInstance<I>()
              where I : class
         {
-            Type key = typeof(I);
-            if (_dependencies.ContainsKey(key))
+            if (nameClass.Contains("ForDebugVersion"))
             {
-                return (I)Activator.CreateInstance(_dependencies[key]);
+                return (I)Activator.CreateInstance(typeof(ForDebugVersion));
+            }
+            else
+            {
+                return (I)Activator.CreateInstance(typeof(ForReleaseVersion));
             }
             throw new InvalidOperationException("Зависимость не найдена.");
         }
-
-
     }
 }
 
