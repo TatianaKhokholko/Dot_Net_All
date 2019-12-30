@@ -17,7 +17,7 @@ namespace ConsoleAppExample.IocContainer
                 using (StreamReader streamReader = new StreamReader(path))
                 {
                     var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
-                    nameClass = Type.GetType("ConsoleAppExample.SettingClasses." + json.Class);              
+                    nameClass = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + ".SettingClasses." + json.Class);
                 }
             }
             catch (FileNotFoundException e)
