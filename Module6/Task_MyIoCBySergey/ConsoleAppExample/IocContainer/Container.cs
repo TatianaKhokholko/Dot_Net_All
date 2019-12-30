@@ -2,12 +2,13 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace ConsoleAppExample.IocContainer
 {
     public class Container
     {
-        private string nameClass;
+        private Type nameClass;
 
         public Container(string path)
         {
@@ -16,8 +17,7 @@ namespace ConsoleAppExample.IocContainer
                 using (StreamReader streamReader = new StreamReader(path))
                 {
                     var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
-                    nameClass = json.Class;
-                          
+                    nameClass = Type.GetType("ConsoleAppExample.SettingClasses." + json.Class);              
                 }
             }
             catch (FileNotFoundException e)
@@ -29,15 +29,7 @@ namespace ConsoleAppExample.IocContainer
         public I CreateInstance<I>()
              where I : class
         {
-            if (nameClass.Contains("ForDebugVersion"))
-            {
-                return (I)Activator.CreateInstance(typeof(ForDebugVersion));
-            }
-            else
-            {
-                return (I)Activator.CreateInstance(typeof(ForReleaseVersion));
-            }
-            throw new InvalidOperationException("Зависимость не найдена.");
+            return (I)Activator.CreateInstance(nameClass);           
         }
     }
 }
