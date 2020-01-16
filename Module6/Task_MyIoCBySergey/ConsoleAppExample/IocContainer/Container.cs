@@ -1,17 +1,17 @@
-﻿using ConsoleAppExample.SettingClasses;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace ConsoleAppExample.IocContainer
 {
     public class Container
     {
-        private Type _nameClass;
-        private Type _nameInterface;
-        private Dictionary<Type, Type> _dependencies = new Dictionary<Type, Type>();
+        private Type _typeForClass;
+        private Type _typeForInterface;
+        public Dictionary<Type, Type> _dependencies = new Dictionary<Type, Type>();
 
         public Container(string path)
         {
@@ -19,10 +19,23 @@ namespace ConsoleAppExample.IocContainer
             {
                 using (StreamReader streamReader = new StreamReader(path))
                 {
-                    var json = JsonConvert.DeserializeObject<ConfigLoader>(streamReader.ReadToEnd());
-                    _nameClass = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + ".SettingClasses." + json.Class);
-                    _nameInterface = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + "." + json.Interface);
-                    RegistreDependency(_nameInterface, _nameClass);
+                    var json = JsonConvert.DeserializeObject <List<ConfigLoader>> (streamReader.ReadToEnd());
+                    
+                    foreach (var item in json)
+                    {
+                        _typeForClass = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + ".SettingClasses." + item.Class);
+                        _typeForInterface = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + "." + item.Interface);
+                        Console.WriteLine(_typeForClass);
+                        Console.WriteLine(_typeForInterface);
+
+                        if (_typeForClass != null
+                            && _typeForInterface.IsInterface
+                            && _typeForClass.IsClass
+                            && _typeForClass.GetInterfaces().Contains(_typeForInterface))
+                        {
+                            RegistreDependency(_typeForInterface, _typeForClass);
+                        }
+                    }
                 }
             }
             catch (FileNotFoundException e)
@@ -33,7 +46,7 @@ namespace ConsoleAppExample.IocContainer
 
         public void RegistreDependency(Type key, Type value)
         {
-            _dependencies.Add(key, value);
+            _dependencies.Add(key, value);            
         }
 
         public I CreateInstance<I>()
@@ -44,7 +57,6 @@ namespace ConsoleAppExample.IocContainer
             {
                 return (I)Activator.CreateInstance(_dependencies[key]);
             }
-
             throw new InvalidOperationException("Зависимость не найдена.");
         }
     }

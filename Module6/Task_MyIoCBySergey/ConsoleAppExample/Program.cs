@@ -5,7 +5,7 @@ namespace ConsoleAppExample
 {
     class Program
     {
-        public static readonly string PATH_JSON = @"..\..\TestRunConfig\Debug.json";
+        public static readonly string PATH_JSON = @"..\..\TestRunConfig\Release.json";
 
         // start Io Container
         public static Container Container;

@@ -1,4 +1,10 @@
-{
-  "Class": "ForReleaseVersion",
-  "Interface": "IMorningShit"
-}
+[
+  {
+    "Class": "ForDebugVersion",
+    "Interface": "IMorningShitDebug"
+  },
+  {
+    "Class": "ForReleaseVersion",
+    "Interface": "IMorningShitRelease"
+  }
+]
