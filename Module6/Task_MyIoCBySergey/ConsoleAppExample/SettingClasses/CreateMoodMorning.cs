@@ -2,12 +2,12 @@
 
 namespace ConsoleAppExample.SettingClasses
 {
-    public class ForDebugVersion : IMorningShitDebug
+    public class CreateMoodMorning : IMorningShit
     {
         public void GetIt()
         {
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Говно с дымом!");
+            Console.WriteLine("Гумно с дымом!!!");
         }
     }
 }

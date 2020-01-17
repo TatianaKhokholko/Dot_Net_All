@@ -2,7 +2,7 @@
 
 namespace ConsoleAppExample.SettingClasses
 {
-    public class ForReleaseVersion : IMorningShitRelease
+    public class CreateMoodEvening : IEveningShit
     {
         public void GetIt()
         {

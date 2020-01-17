@@ -1,10 +1,10 @@
   [
     {
-      "Class": "ForDebugVersion",
-      "Interface": "IMorningShitDebug"
+      "Class": "CreateMoodMorning",
+      "Interface": "IMorningShit"
     },
     {
-      "Class": "ForReleaseVersion",
-      "Interface": "IMorningShitRelease"
+      "Class": "CreateMoodEvening",
+      "Interface": "IEveningShit"
     }
   ]

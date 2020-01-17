@@ -2,7 +2,7 @@
 
 namespace ConsoleAppExample
 {
-    public interface IMorningShitRelease
+    public interface IMorningShit
     {
        void GetIt();
     }

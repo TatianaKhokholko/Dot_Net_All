@@ -47,14 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigLoader.cs" />
-    <Compile Include="IMorningShitRelease.cs" />
-    <Compile Include="IMorningShitDebug.cs" />
+    <Compile Include="IEveningShit.cs" />
+    <Compile Include="IMorningShit.cs" />
     <Compile Include="IocContainer\Container.cs" />
     <Compile Include="MorningHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingClasses\ForDebugVersion.cs" />
-    <Compile Include="SettingClasses\ForReleaseVersion.cs" />
+    <Compile Include="SettingClasses\CreateMoodMorning.cs" />
+    <Compile Include="SettingClasses\CreateMoodEvening.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
