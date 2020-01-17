@@ -6,8 +6,8 @@ namespace ConsoleAppExample.SettingClasses
     {
         public void GetIt()
         {
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Гумно с дымом!!!");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("Прекрасное утро, что тут скажешь!");
         }
     }
 }

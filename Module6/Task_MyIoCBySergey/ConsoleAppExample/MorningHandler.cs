@@ -4,20 +4,23 @@ namespace ConsoleAppExample
 {
     public class MorningHandler
     {
-        private readonly IMorningShit _morningShitDebug;
-        private readonly IEveningShit _morningShitRelease;
+        private readonly IMorningShit _morningShit;
+        private readonly IEveningShit _eveningShit;
 
         public MorningHandler()
         {
-            _morningShitDebug = Program.Container.CreateInstance<IMorningShit>();
-            _morningShitRelease = Program.Container.CreateInstance<IEveningShit>();
+            _morningShit = Program.Container.CreateInstance<IMorningShit>();
+            _eveningShit = Program.Container.CreateInstance<IEveningShit>();
         }
 
         public void MeetMorning()
         {
             Console.WriteLine("This Morning is");
-            _morningShitDebug.GetIt();
-            _morningShitRelease.GetIt();
+            _morningShit.GetIt();
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("This Evening is");
+            _eveningShit.GetIt();
         }
     }
 }

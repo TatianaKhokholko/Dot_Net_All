@@ -1,10 +1,10 @@
 [
   {
-    "Class": "CreateMoodMorning",
+    "Class": "CreateMoodMorningByMonday",
     "Interface": "IMorningShit"
   },
   {
-    "Class": "CreateMoodEvening",
+    "Class": "CreateMoodEveningByMonday",
     "Interface": "IEveningShit"
   }
 ]

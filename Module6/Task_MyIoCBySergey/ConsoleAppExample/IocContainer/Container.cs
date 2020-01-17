@@ -25,8 +25,6 @@ namespace ConsoleAppExample.IocContainer
                     {
                         _typeForClass = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + ".SettingClasses." + item.Class);
                         _typeForInterface = Type.GetType(Assembly.GetEntryAssembly().GetName().Name + "." + item.Interface);
-                        Console.WriteLine(_typeForClass);
-                        Console.WriteLine(_typeForInterface);
 
                         if (_typeForClass != null
                             && _typeForInterface.IsInterface
